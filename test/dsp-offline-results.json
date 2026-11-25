@@ -1,0 +1,97 @@
+{
+  "passed": 18,
+  "failed": 0,
+  "results": [
+    {
+      "name": "strength 50 → excessDb ≈ 6",
+      "ok": true,
+      "detail": "got 6"
+    },
+    {
+      "name": "strength 50 → persist = 6",
+      "ok": true,
+      "detail": "got 6"
+    },
+    {
+      "name": "strength 50 → attenDb ≈ 28",
+      "ok": true,
+      "detail": "got 28"
+    },
+    {
+      "name": "strength 50 → minHz = 400",
+      "ok": true,
+      "detail": "got 400"
+    },
+    {
+      "name": "voice 80–300 Hz change ≥ -1.5 dB (preserved)",
+      "ok": true,
+      "detail": "Δ=0.00 dB (in 43.9 → out 43.9)"
+    },
+    {
+      "name": "horn 600–700 Hz attenuated ≥ 8 dB",
+      "ok": true,
+      "detail": "Δ=-27.99 dB (in 50.8 → out 22.8)"
+    },
+    {
+      "name": "horn cut deeper than voice damage",
+      "ok": true,
+      "detail": "horn Δ -27.99 vs voice Δ 0.00"
+    },
+    {
+      "name": "full_honk voice band Δ ≥ -2 dB",
+      "ok": true,
+      "detail": "Δ=-0.10 dB"
+    },
+    {
+      "name": "full_honk horn 600–700 Δ ≤ -10 dB",
+      "ok": true,
+      "detail": "Δ=-19.23 dB"
+    },
+    {
+      "name": "full_honk 2nd harmonic 1300–1350 Δ ≤ -5 dB",
+      "ok": true,
+      "detail": "Δ=-9.86 dB"
+    },
+    {
+      "name": "speech+horn voice band Δ ≥ -2 dB",
+      "ok": true,
+      "detail": "Δ=-0.00 dB"
+    },
+    {
+      "name": "speech+horn horn 600–700 Δ ≤ -8 dB",
+      "ok": true,
+      "detail": "Δ=-13.09 dB"
+    },
+    {
+      "name": "near-passthrough error ≤ -60 dB when nothing is cut",
+      "ok": true,
+      "detail": "err=-139.4 dB @ lag=2047 (declared 2048)"
+    },
+    {
+      "name": "no host_permissions Facebook-only lock",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "content_scripts not Facebook-gated",
+      "ok": true,
+      "detail": "(none)"
+    },
+    {
+      "name": "has tabCapture permission",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "has offscreen permission",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "minimum_chrome_version ≥ 116",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "at": "2026-11-24T18:44:59.167Z"
+}

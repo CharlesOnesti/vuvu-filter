@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Honk Filter — test bench</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        max-width: 640px;
+        margin: 32px auto;
+        padding: 0 20px;
+        font: 14px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      h1 { font-size: 19px; }
+      .sample { border: 1px solid #8884; border-radius: 10px; padding: 14px; margin: 16px 0; }
+      .sample h2 { font-size: 14px; margin: 0 0 10px; }
+      audio { width: 100%; }
+      .row { display: flex; justify-content: space-between; align-items: baseline; }
+      input[type="range"] { width: 100%; }
+      button { padding: 8px 14px; border-radius: 7px; border: 1px solid #8886; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+      button[aria-pressed="true"] { background: #2f6df6; color: #fff; border-color: #2f6df6; }
+      .hint { color: #8890a0; font-size: 12px; }
+      code { background: #8882; padding: 1px 5px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Honk Filter — test bench</h1>
+    <p class="hint">
+      Runs the real worklet over the two sample recordings, so the filter can be tuned
+      without waiting for a live game. Press <strong>Bypass</strong> while a clip plays to
+      A/B it. The second clip has a voice under the honking — check it stays intelligible.
+    </p>
+
+    <div class="row">
+      <label for="strength"><strong>Strength</strong></label>
+      <output id="strengthVal">50</output>
+    </div>
+    <input type="range" id="strength" min="0" max="100" value="50" />
+    <p>
+      <button id="bypass" aria-pressed="false">Bypass (hear original)</button>
+      <span class="hint" id="status">Press play on a clip to start.</span>
+    </p>
+
+    <div class="sample">
+      <h2>1. Honking only</h2>
+      <audio controls preload="metadata" src="../Full_Honking_Noise_Sound.ogg"></audio>
+      <p class="hint">Horn fundamental ~660 Hz. Expect a clear drop in the piercing tone.</p>
+    </div>
+
+    <div class="sample">
+      <h2>2. Honking over speech</h2>
+      <audio controls preload="metadata" src="../Honking_but_with_meaninful_info_sound.ogg"></audio>
+      <p class="hint">The voice must survive. If it sounds thin, raise <code>Protect voice below</code>.</p>
+    </div>
+
+    <script type="module">
+      import { strengthToParams } from '../src/common/params.js';
+
+      const ctx = new AudioContext();
+      await ctx.audioWorklet.addModule('../src/worklet/dehonk-processor.js');
+
+      const nodes = [];
+      const strength = document.getElementById('strength');
+      const strengthVal = document.getElementById('strengthVal');
+      const bypassBtn = document.getElementById('bypass');
+      const status = document.getElementById('status');
+      let bypass = false;
+
+      for (const el of document.querySelectorAll('audio')) {
+        const src = ctx.createMediaElementSource(el);
+        const node = new AudioWorkletNode(ctx, 'dehonk-processor', {
+          processorOptions: { params: strengthToParams(50), bypass: false },
+          outputChannelCount: [2],
+        });
+        src.connect(node);
+        node.connect(ctx.destination);
+        nodes.push(node);
+        el.addEventListener('play', () => ctx.resume());
+      }
+
+      function push() {
+        const params = strengthToParams(Number(strength.value));
+        for (const n of nodes) {
+          n.port.postMessage({ type: 'params', params });
+          n.port.postMessage({ type: 'bypass', value: bypass });
+        }
+        status.textContent = bypass
+          ? 'Bypassed — this is the original audio.'
+          : `Filtering at strength ${strength.value}.`;
+      }
+
+      strength.addEventListener('input', () => {
+        strengthVal.textContent = strength.value;
+        push();
+      });
+      bypassBtn.addEventListener('click', () => {
+        bypass = !bypass;
+        bypassBtn.setAttribute('aria-pressed', String(bypass));
+        push();
+      });
+      push();
+    </script>
+  </body>
+</html>

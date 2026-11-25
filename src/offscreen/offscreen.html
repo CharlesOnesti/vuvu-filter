@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Honk Filter offscreen</title>
+  </head>
+  <body>
+    <!--
+      Hidden AudioContext host for tabCapture.
+      Captured tab audio is muted by Chrome until we route it back here through
+      the dehonk AudioWorklet → destination.
+    -->
+    <script type="module" src="offscreen.js"></script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Honk Filter</title>
+  </head>
+  <body>
+    <header>
+      <h1>Honk Filter</h1>
+      <label class="switch" title="Turn the filter on or off for this tab">
+        <input type="checkbox" id="enabled" />
+        <span class="slider-switch"></span>
+      </label>
+    </header>
+
+    <p class="status" id="status">Checking this tab…</p>
+    <p class="mode" id="modeLine">Mode: —</p>
+
+    <button id="start" class="grant" type="button">Start on this tab</button>
+    <button id="stop" class="reset hidden" type="button">Stop filtering</button>
+
+    <section class="control">
+      <div class="row">
+        <label for="strength">Strength</label>
+        <output id="strengthVal">50</output>
+      </div>
+      <input type="range" id="strength" min="0" max="100" step="1" value="50" />
+      <div class="scale"><span>gentle</span><span>strong</span></div>
+      <p class="hint">
+        Slide while the honking is happening. Around 50 keeps the commentator natural.
+      </p>
+    </section>
+
+    <section class="control">
+      <div class="row">
+        <label for="meter">Working</label>
+        <output id="meterVal">—</output>
+      </div>
+      <div class="meter"><div class="meter-fill" id="meter"></div></div>
+      <p class="hint">How hard the filter is cutting right now.</p>
+    </section>
+
+    <button id="bypass" class="bypass" type="button">Hold to hear the original</button>
+
+    <details>
+      <summary>Advanced</summary>
+      <div class="control">
+        <div class="row">
+          <label for="minHz">Protect voice below</label>
+          <output id="minHzVal">400 Hz</output>
+        </div>
+        <input type="range" id="minHz" min="200" max="800" step="25" value="400" />
+        <p class="hint">
+          Nothing below this is ever touched. Raise it if the commentator sounds thin;
+          lower it if low horns get through.
+        </p>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="forceElement" />
+        Force MediaElementSource (HTML5 only)
+      </label>
+      <p class="hint">
+        Default uses tab audio capture (works on many DRM sports apps). Force element
+        mode only for simple HTML5 / debugging.
+      </p>
+      <button id="reset" class="reset" type="button">Reset to defaults</button>
+      <button id="bench" class="reset" type="button">Open test bench</button>
+    </details>
+
+    <p class="footnote">
+      Primary: tabCapture → offscreen DSP. Fallback: MediaElementSource.
+      Some Widevine apps may still yield silent capture — see README.
+    </p>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

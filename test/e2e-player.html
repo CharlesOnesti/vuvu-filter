@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Honk Filter E2E Player (non-Facebook)</title>
+    <style>
+      body {
+        font: 16px/1.45 system-ui, sans-serif;
+        max-width: 720px;
+        margin: 40px auto;
+        padding: 0 20px;
+        background: #0f1419;
+        color: #e7ecf3;
+      }
+      h1 { font-size: 22px; }
+      .box {
+        border: 1px solid #334;
+        border-radius: 12px;
+        padding: 16px;
+        margin: 16px 0;
+        background: #1a222d;
+      }
+      audio { width: 100%; margin-top: 8px; }
+      .tag {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: #2f6df6;
+        color: #fff;
+        font-size: 12px;
+      }
+      code { background: #0006; padding: 1px 6px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Honk Filter E2E — public HTML5 (not Facebook)</h1>
+    <p>
+      <span class="tag">SITE: local HTML5</span>
+      This page is intentionally <strong>not</strong> facebook.com. If the extension
+      filters here, the Facebook-only host gate is gone.
+    </p>
+
+    <div class="box">
+      <h2>1. Honking only</h2>
+      <audio id="a1" controls loop preload="auto" src="../Full_Honking_Noise_Sound.ogg"></audio>
+    </div>
+
+    <div class="box">
+      <h2>2. Honking over speech</h2>
+      <audio id="a2" controls loop preload="auto" src="../Honking_but_with_meaninful_info_sound.ogg"></audio>
+    </div>
+
+    <div class="box">
+      <h2>Instructions</h2>
+      <ol>
+        <li>Press play on clip 2.</li>
+        <li>Click the Honk Filter extension → <strong>Start on this tab</strong>.</li>
+        <li>Confirm status shows tabCapture (or element fallback) — not a Facebook-only message.</li>
+        <li>Hold “hear original” to A/B the horn.</li>
+      </ol>
+      <p>Page origin: <code id="origin"></code></p>
+    </div>
+    <script>
+      document.getElementById('origin').textContent = location.href;
+      // Autoplay after a click anywhere (autoplay policies)
+      document.body.addEventListener(
+        'click',
+        () => {
+          const a2 = document.getElementById('a2');
+          if (a2.paused) a2.play().catch(() => {});
+        },
+        { once: true }
+      );
+    </script>
+  </body>
+</html>
